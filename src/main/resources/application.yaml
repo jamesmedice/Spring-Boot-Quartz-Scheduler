@@ -6,7 +6,7 @@ server:
 spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        password: ENC(mjRuVNZLTLFSE9n9KAUE/g==)
+        password: ENC(P81MIuYGP/1JiUNT/Ip5+w==)
         url: jdbc:mysql://localhost:3306/quartz?useSSL=false
         username: root
         initialization-mode: always
