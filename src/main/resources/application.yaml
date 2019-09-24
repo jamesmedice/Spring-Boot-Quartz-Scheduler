@@ -1,0 +1,39 @@
+server:
+    port: 8686
+# ===================================================================
+# ===================================================================
+
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        password: ENC(mjRuVNZLTLFSE9n9KAUE/g==)
+        url: jdbc:mysql://localhost:3306/quartz?useSSL=false
+        username: root
+        initialization-mode: always
+        continue-on-error: true
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    mail:
+        host: smtp.gmail.com
+        password: ''
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: tiago.sllater@gmail.com
+    quartz:
+        jdbc:
+            schema: classpath:org/quartz/impl/jdbcjobstore/tables_mysql_innodb.sql
+        job-store-type: jdbc
+        properties:
+            org:
+                quartz:
+                    threadPool:
+                        threadCount: 5
