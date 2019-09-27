@@ -12,5 +12,5 @@ ARG DATABASE_NAME=Quartz
 
 EXPOSE 8080
 LABEL maintainer=“yiago.sllater@gmail.com”
-COPY --from=BUILD /app/target/*.jar  application.jar
+COPY --from=BUILDER /app/target/*.jar  application.jar
 ENTRYPOINT ["java", "-jar", "-Djasypt.encryptor.password=keyMaster", "/application.jar"]
