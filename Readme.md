@@ -44,7 +44,7 @@ Finally, You can run the app by typing the following command from the root direc
 mvn spring-boot:run
 ```
 
-## Scheduling an Email using the /scheduleEmail API
+## Scheduling Message using the /scheduleMessage API
 
 ```bash
 curl -i -H "Content-Type: application/json" -X POST \
