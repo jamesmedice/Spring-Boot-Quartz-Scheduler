@@ -8,8 +8,8 @@ services:
       - MYSQL_DATABASE=quartz
     volumes:
       - /data/mysql
-  spring-boot-jpa-app:
-    image: quartzscheduler
+  quartzscheduler-container:
+    image: quartzscheduler:latest
     build:
       context: ./
       dockerfile: Dockerfile
@@ -18,4 +18,4 @@ services:
     ports:
       - 8686:8787
     volumes:
-      - /data/app
+      - /data/quartzscheduler
