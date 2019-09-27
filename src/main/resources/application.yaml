@@ -5,9 +5,9 @@ server:
 
 spring:
     datasource:
-        driver-class-name: com.mysql.jdbc.Driver
         password: ENC(P81MIuYGP/1JiUNT/Ip5+w==)
-        url: jdbc:mysql://localhost:3306/quartz?useSSL=false
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/${DATABASE_NAME:quartz}?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
         username: root
         initialization-mode: always
         continue-on-error: true
@@ -17,17 +17,6 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    mail:
-        host: smtp.gmail.com
-        password: ''
-        port: 587
-        properties:
-            mail:
-                smtp:
-                    auth: true
-                    starttls:
-                        enable: true
-        username: tiago.sllater@gmail.com
     quartz:
         jdbc:
             schema: classpath:org/quartz/impl/jdbcjobstore/tables_mysql_innodb.sql

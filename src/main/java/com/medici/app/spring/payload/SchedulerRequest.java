@@ -7,11 +7,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class ScheduleEmailRequest {
+public class SchedulerRequest {
 
 	@Email
 	@NotEmpty
-	private String email;
+	private String title;
 
 	@NotEmpty
 	private String subject;
@@ -24,13 +24,14 @@ public class ScheduleEmailRequest {
 
 	@NotNull
 	private ZoneId timeZone;
+ 
 
-	public String getEmail() {
-		return email;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getSubject() {

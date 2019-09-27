@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mysql-docker-container:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=tpm1234
+      - MYSQL_DATABASE=quartz
+    volumes:
+      - /data/mysql
+  spring-boot-jpa-app:
+    image: SpringBootQuartzScheduler
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-docker-container
+    ports:
+      - 8686:8787
+    volumes:
+      - /data/spring-boot-app

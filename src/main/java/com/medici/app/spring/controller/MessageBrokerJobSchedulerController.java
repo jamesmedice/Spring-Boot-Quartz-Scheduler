@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medici.app.spring.job.EmailJob;
-import com.medici.app.spring.payload.ScheduleEmailRequest;
-import com.medici.app.spring.payload.ScheduleEmailResponse;
+import com.medici.app.spring.job.MessageBrokerJob;
+import com.medici.app.spring.payload.SchedulerRequest;
+import com.medici.app.spring.payload.SchedulerResponse;
 
 /**
  * 
@@ -33,18 +33,19 @@ import com.medici.app.spring.payload.ScheduleEmailResponse;
  *
  */
 @RestController
-public class EmailJobSchedulerController {
-	private static final Logger logger = LoggerFactory.getLogger(EmailJobSchedulerController.class);
+public class MessageBrokerJobSchedulerController {
+	private static final Logger logger = LoggerFactory.getLogger(MessageBrokerJobSchedulerController.class);
 
 	@Autowired
 	private Scheduler scheduler;
 
-	@PostMapping("/scheduleEmail")
-	public ResponseEntity<ScheduleEmailResponse> scheduleEmail(@Valid @RequestBody ScheduleEmailRequest scheduleEmailRequest) {
+	@PostMapping("/scheduleMessage")
+	public ResponseEntity<SchedulerResponse> schedulerMessage(@Valid @RequestBody SchedulerRequest scheduleEmailRequest) {
 		try {
 			ZonedDateTime dateTime = ZonedDateTime.of(scheduleEmailRequest.getDateTime(), scheduleEmailRequest.getTimeZone());
+
 			if (dateTime.isBefore(ZonedDateTime.now())) {
-				ScheduleEmailResponse scheduleEmailResponse = new ScheduleEmailResponse(false, "dateTime must be after current time");
+				SchedulerResponse scheduleEmailResponse = new SchedulerResponse(false, "dateTime must be after current time");
 				return ResponseEntity.badRequest().body(scheduleEmailResponse);
 			}
 
@@ -52,28 +53,29 @@ public class EmailJobSchedulerController {
 			Trigger trigger = buildJobTrigger(jobDetail, dateTime);
 			scheduler.scheduleJob(jobDetail, trigger);
 
-			ScheduleEmailResponse scheduleEmailResponse = new ScheduleEmailResponse(true, jobDetail.getKey().getName(), jobDetail.getKey().getGroup(), "Email Scheduled Successfully!");
+			SchedulerResponse scheduleEmailResponse = new SchedulerResponse(true, jobDetail.getKey().getName(), jobDetail.getKey().getGroup(), "Email Scheduled Successfully!");
 			return ResponseEntity.ok(scheduleEmailResponse);
-		} catch (SchedulerException ex) {
-			logger.error("Error scheduling email", ex);
 
-			ScheduleEmailResponse scheduleEmailResponse = new ScheduleEmailResponse(false, "Error scheduling email. Please try later!");
+		} catch (SchedulerException ex) {
+			logger.error("Error scheduling message", ex);
+
+			SchedulerResponse scheduleEmailResponse = new SchedulerResponse(false, "Error scheduling message. Please try later!");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(scheduleEmailResponse);
 		}
 	}
 
-	private JobDetail buildJobDetail(ScheduleEmailRequest scheduleEmailRequest) {
+	private JobDetail buildJobDetail(SchedulerRequest schedulerRequest) {
 		JobDataMap jobDataMap = new JobDataMap();
 
-		jobDataMap.put("email", scheduleEmailRequest.getEmail());
-		jobDataMap.put("subject", scheduleEmailRequest.getSubject());
-		jobDataMap.put("body", scheduleEmailRequest.getBody());
+		jobDataMap.put("title", schedulerRequest.getTitle());
+		jobDataMap.put("subject", schedulerRequest.getSubject());
+		jobDataMap.put("body", schedulerRequest.getBody());
 
-		return JobBuilder.newJob(EmailJob.class).withIdentity(UUID.randomUUID().toString(), "email-jobs").withDescription("Send Email Job").usingJobData(jobDataMap).storeDurably().build();
+		return JobBuilder.newJob(MessageBrokerJob.class).withIdentity(UUID.randomUUID().toString(), "message-jobs").withDescription("Send Message Job").usingJobData(jobDataMap).storeDurably().build();
 	}
 
 	private Trigger buildJobTrigger(JobDetail jobDetail, ZonedDateTime startAt) {
-		return TriggerBuilder.newTrigger().forJob(jobDetail).withIdentity(jobDetail.getKey().getName(), "email-triggers").withDescription("Send Email Trigger").startAt(Date.from(startAt.toInstant()))
+		return TriggerBuilder.newTrigger().forJob(jobDetail).withIdentity(jobDetail.getKey().getName(), "message-triggers").withDescription("Send Message Trigger").startAt(Date.from(startAt.toInstant()))
 				.withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionFireNow()).build();
 	}
 }
