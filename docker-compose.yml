@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  mysql:
-    container_name: mysql-docker-container
+  mysql-docker:
+    container_name: mysql-docker
     image: mysql:latest
     restart: always
     environment:
@@ -10,14 +10,14 @@ services:
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     ports:
-        - ${DATABASE_PORT}:${DATABASE_PORT}
+      - ${DATABASE_PORT}:${DATABASE_PORT}
   app:
-    container_name: quartzscheduler-container
+    container_name: quartzscheduler
     image: jamesmedice/quartzscheduler:latest
     depends_on:
-      - mysql
+      - mysql-docker
     links:
-      - mysql
+      - mysql-docker:db
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_USER=${DATABASE_USER}

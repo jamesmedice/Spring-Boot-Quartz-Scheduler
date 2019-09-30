@@ -8,6 +8,5 @@ RUN mvn clean install -Pdev -DskipTests
 
 
 FROM openjdk:8-jre-alpine
-LABEL maintainer=“tiago.sllater@gmail.com”
 COPY --from=BUILDER /app/target/*.jar  application.jar
 ENTRYPOINT ["java", "-jar", "-Djasypt.encryptor.password=keyMaster", "/application.jar"]

@@ -1,7 +1,5 @@
 server:
     port: 8686
-# ===================================================================
-# ===================================================================
 
 spring:
     datasource:
@@ -18,12 +16,3 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    quartz:
-        jdbc:
-            schema: classpath:org/quartz/impl/jdbcjobstore/tables_mysql_innodb.sql
-        job-store-type: jdbc
-        properties:
-            org:
-                quartz:
-                    threadPool:
-                        threadCount: 5
