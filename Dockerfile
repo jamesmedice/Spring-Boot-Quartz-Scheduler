@@ -5,10 +5,7 @@ WORKDIR /app
 RUN mvn -v
 RUN mvn clean install -Pdev -DskipTests
 
-ARG DATABASE_HOST=127.0.0.1
-ARG DATABASE_PORT=3306
-ARG DATABASE_NAME=Quartz
- 
+
 
 FROM openjdk:8-jre-alpine
 LABEL maintainer=“tiago.sllater@gmail.com”

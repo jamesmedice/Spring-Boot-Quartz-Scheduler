@@ -1,21 +1,28 @@
-version: '3'
+version: '3.7'
 
 services:
-  mysql-docker-container:
+  mysql:
+    container_name: mysql-docker-container
     image: mysql:latest
+    restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=tpm1234
-      - MYSQL_DATABASE=quartz
-    volumes:
-      - /data/mysql
-  quartzscheduler-container:
-    image: quartzscheduler:latest
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    depends_on:
-      - mysql-docker-container
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     ports:
-      - 8686:8787
-    volumes:
-      - /data/quartzscheduler
+        - ${DATABASE_PORT}:${DATABASE_PORT}
+  app:
+    container_name: quartzscheduler-container
+    image: jamesmedice/quartzscheduler:latest
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    environment:
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+    ports:
+      - "8686:8686"

@@ -7,7 +7,7 @@ spring:
     datasource:
         password: ENC(P81MIuYGP/1JiUNT/Ip5+w==)
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/${DATABASE_NAME:quartz}?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
+        url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/${DATABASE_NAME:quartz}?createDatabaseIfNotExist=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&emulateLocators=true&characterEncoding=UTF-8&useSSL=false
         username: root
         initialization-mode: always
         continue-on-error: true
