@@ -20,6 +20,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mysql-docker
+    links:
+      - mysql-docker
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_USER=${DATABASE_USER}
