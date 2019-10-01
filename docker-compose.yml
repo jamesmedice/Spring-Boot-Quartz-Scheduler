@@ -19,7 +19,7 @@ services:
     depends_on:
       - mysql-docker
     links:
-      - mysql-docker:db
+      - mysql-docker
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_USER=${DATABASE_USER}
