@@ -1,23 +1,25 @@
 version: '3.7'
 
 services:
-  mysql:
-    container_name: mysql-docker-container
-    image: mysql:latest
+  mysql-docker:
+    container_name: mysql-docker
+    image: mysql:5.7
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
       - MYSQL_DATABASE=${DATABASE_NAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     ports:
-        - ${DATABASE_PORT}:${DATABASE_PORT}
+      - ${DATABASE_PORT_PROXY}:${DATABASE_PORT}
   app:
-    container_name: quartzscheduler-container
-    image: jamesmedice/quartzscheduler:latest
+    container_name: quartzscheduler
+    image: jamesmedice/quartzscheduler:latest    
+    build:
+      context: ./
+      dockerfile: Dockerfile
     depends_on:
-      - mysql
+      - mysql-docker
     links:
-      - mysql
+      - mysql-docker:db
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_USER=${DATABASE_USER}
@@ -26,4 +28,3 @@ services:
       - DATABASE_PORT=${DATABASE_PORT}
     ports:
       - "8686:8686"
-    command: mvn clean spring-boot:run -Djasypt.encryptor.password=keyMaster
