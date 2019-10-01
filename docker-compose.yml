@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.5'
 
 services:
   mysql-docker:
@@ -8,8 +8,10 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
       - MYSQL_DATABASE=${DATABASE_NAME}
-    ports:
-      - ${DATABASE_PORT_PROXY}:${DATABASE_PORT}
+      - MYSQL_USER=${DATABASE_USER}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+    expose:
+      - ${DATABASE_PORT}
   app:
     container_name: quartzscheduler
     image: jamesmedice/quartzscheduler:latest    
@@ -17,8 +19,6 @@ services:
       context: ./
       dockerfile: Dockerfile
     depends_on:
-      - mysql-docker
-    links:
       - mysql-docker
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
